@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeReview: AI code security reviewer for beginners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="#top"><svg class="ico"><use href="#shield"/></svg>SafeReview</a>
+  <nav class="links" aria-label="Main">
+    <a href="#how">How it works</a><a href="#limitations">Limitations</a><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn primary sm" href="#app">Try it now</a>
+  </nav>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <p class="pill"><i></i>Open source · Powered by Gemma 4 · Hacktoberfest 2026</p>
+  <h1>AI wrote it.<br>SafeReview <span class="rot" id="rot">Detects</span> it.</h1>
+  <p class="lead">Paste your code. We find leaked secrets and risky patterns, redact secrets before any AI sees them, and explain every risk in plain language.</p>
+  <div class="cta"><a class="btn primary" href="#app">Review my code</a><a class="btn outline" href="https://github.com/" target="_blank" rel="noopener">View on GitHub</a></div>
+  <p class="small muted">No install. No account. Use fake keys only.</p>
+
+  <div class="demo" id="demo" aria-label="Animated demo of SafeReview">
+    <div class="panel">
+      <div class="panel-head"><span class="dots"><i></i><i></i><i></i></span><span class="fname">snippet.js</span></div>
+      <div class="demo-code"><pre class="code" id="demoCode"></pre><div class="scan" id="scan"></div></div>
+    </div>
+    <div class="demo-res">
+      <ol class="steps" id="demoSteps"></ol>
+      <div id="demoCards"></div>
+      <p class="small muted" id="demoCounts"></p>
+    </div>
+  </div>
+</div></section>
+
+<section class="section" id="app"><div class="wrap">
+  <h2>Try it</h2>
+  <p class="sub">Paste code below. Everything stays on this page until you click Review.</p>
+  <div class="app-grid">
+    <div class="panel">
+      <div class="panel-head"><span class="dots"><i></i><i></i><i></i></span><span class="fname">snippet.js</span>
+        <select id="lang" aria-label="Language"><option>Auto-detect</option><option>JavaScript</option><option>Python</option><option>C</option></select></div>
+      <div class="editor"><pre class="gutter" id="gutter" aria-hidden="true">1</pre>
+        <textarea id="code" spellcheck="false" aria-label="Code to review" placeholder="Paste your code here"></textarea></div>
+      <p class="warn">Do not paste real production secrets. Rotate any key you think was exposed.</p>
+      <div class="actions"><button class="btn ghost" id="sample" type="button">Load sample</button>
+        <button class="btn primary" id="review" type="button"><svg class="ico"><use href="#shield"/></svg>Review</button></div>
+    </div>
+
+    <div class="panel rp" id="rp" data-state="empty">
+      <div class="rp-head" data-show="results ok"><strong id="total"></strong><span id="counts"></span></div>
+      <ol class="steps" id="appSteps" data-show="loading results ok"></ol>
+      <div class="empty" data-show="empty"><svg class="ico big"><use href="#shield"/></svg><p>Paste code and click Review</p></div>
+      <div data-show="loading"><div class="skel"></div><div class="skel"></div></div>
+      <div id="results" data-show="results"></div>
+      <div class="ok" data-show="ok"><svg class="ico big"><use href="#shield"/></svg><p>No issues found by our rules. That is not a guarantee, so keep reviewing.</p></div>
+      <div class="error" data-show="error" role="alert"><p>Something went wrong. Your code was not stored.</p><button class="btn outline sm" id="retry" type="button">Retry</button></div>
+      <details class="redacted" data-show="results ok"><summary>Redacted code sent to AI</summary><pre id="redacted"></pre></details>
+      <p class="note small muted">SafeReview is an aid to review, not a guarantee of security.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="section" id="how"><div class="wrap">
+  <h2>Rules find. Redaction protects. AI explains.</h2>
+  <p class="sub">We do not ask the AI to be the detector. Language models can miss real issues or invent false ones. Rules detect; AI teaches.</p>
+  <ol class="how">
+    <li class="card"><span class="num">1</span><h3>Detect</h3><p>Fast, repeatable rules for hardcoded secrets, string-built SQL, eval(), and unsafe C functions.</p></li>
+    <li class="card"><span class="num">2</span><h3>Protect</h3><p>Every detected secret is replaced with <span class="chip">[REDACTED]</span> before anything leaves the server.</p></li>
+    <li class="card"><span class="num">3</span><h3>Explain</h3><p>Gemma 4, an open-weight model, explains why it is dangerous and how to fix it, in beginner language.</p></li>
+  </ol>
+</div></section>
+
+<section class="section" id="limitations"><div class="wrap">
+  <h2>What SafeReview can't do</h2>
+  <div class="limits">
+    <div class="card">Can miss unusual secret formats</div>
+    <div class="card">May flag harmless example values</div>
+    <div class="card">AI explanations can be wrong, so review fixes</div>
+    <div class="card">Sees only the pasted snippet</div>
+  </div>
+  <p class="muted sub">Not a full security audit. Use it alongside GitHub secret scanning and Gitleaks.</p>
+</div></section>
+</main>
+<footer class="footer">
+  <div class="wrap foot">
+    <a class="logo" href="#top">
+      <svg class="ico"><use href="#shield"/></svg>
+      SafeReview
+    </a>
+    <div class="muted small">© 2026 SafeReview Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
